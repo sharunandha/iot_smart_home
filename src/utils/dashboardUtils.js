@@ -7,8 +7,7 @@ const toStatus = (value, warning, danger) => {
 export const getSensorStatuses = (latest) => ({
   temperature: toStatus(latest.temperature, 30, 35),
   humidity: latest.humidity > 75 ? "high" : latest.humidity > 65 ? "warning" : "normal",
-  light: latest.light < 220 ? "warning" : "normal",
-  motion: latest.motion ? "active" : "idle",
+  darkDetection: latest.darkDetection ? "warning" : "normal",
 })
 
 export const buildInsights = (latest) => {
@@ -16,31 +15,30 @@ export const buildInsights = (latest) => {
 
   if (latest.temperature < 28) insights.push("Room temperature is comfortable.")
   if (latest.temperature >= 30) insights.push("Temperature rising. Smart fan support recommended.")
-  if (latest.light < 220) insights.push("Low light detected. Smart lighting activated.")
-  if (latest.motion === 0) insights.push("No motion detected in the monitored area.")
-  if (latest.fan === 0 && latest.led === 0) insights.push("Energy-saving mode is currently active.")
+  if (latest.darkDetection === 1) insights.push("Dark environment detected from LDR sensor.")
+  if (latest.darkDetection === 0) insights.push("Bright environment detected from LDR sensor.")
 
   return insights.length ? insights : ["Environment remains stable and automated controls are balanced."]
 }
 
 export const buildAutomation = (latest) => [
   {
-    id: "light",
-    label: "Smart Light",
-    isOn: latest.led === 1,
-    reason: latest.light < 220 ? "Dark environment detected" : "Ambient light is sufficient",
+    id: "dark",
+    label: "Dark Detection",
+    isOn: latest.darkDetection === 1,
+    reason: latest.darkDetection === 1 ? "LDR reports dark condition" : "LDR reports bright condition",
   },
   {
     id: "fan",
-    label: "Smart Fan",
-    isOn: latest.fan === 1,
+    label: "Temperature Advisory",
+    isOn: latest.temperature > 30,
     reason: latest.temperature > 30 ? "Temperature exceeded threshold" : "Temperature within setpoint",
   },
   {
-    id: "motion",
-    label: "Motion Detection",
-    isOn: latest.motion === 1,
-    reason: latest.motion ? "Movement activity detected" : "No motion currently detected",
+    id: "humidity",
+    label: "Humidity Advisory",
+    isOn: latest.humidity > 75,
+    reason: latest.humidity > 75 ? "Humidity is high" : "Humidity is in normal range",
   },
 ]
 

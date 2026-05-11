@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import {
-  Activity,
   AlertTriangle,
   Bot,
   Lightbulb,
@@ -30,8 +29,7 @@ const sidebarItems = ["Dashboard", "Analytics", "Automation", "Logs", "System He
 const sensorMeta = [
   { key: "temperature", label: "Temperature", unit: "°C", icon: Thermometer },
   { key: "humidity", label: "Humidity", unit: "%", icon: Waves },
-  { key: "light", label: "Light Intensity", unit: "lx", icon: Lightbulb },
-  { key: "motion", label: "Motion Detection", unit: "", icon: Activity },
+  { key: "darkDetection", label: "Dark Detection", unit: "", icon: Lightbulb },
 ]
 
 const cardStatusColor = {
@@ -57,7 +55,7 @@ const SensorCard = ({ label, value, unit, status, Icon, chartData, chartKey }) =
       <span className={`text-xs uppercase tracking-widest ${cardStatusColor[status] ?? "text-sky-600"}`}>{status}</span>
     </div>
     <div className="mb-4 text-2xl font-semibold text-slate-900 sm:text-3xl">
-      {chartKey === "motion" ? (value ? "Active" : "Inactive") : `${value.toFixed(1)}${unit}`}
+      {chartKey === "darkDetection" ? (value ? "Dark" : "Light") : `${value.toFixed(1)}${unit}`}
     </div>
     <div className="h-16">
       <ResponsiveContainer width="100%" height="100%">
@@ -114,11 +112,11 @@ const IotDashboard = () => {
   )
 
   const exportData = () => {
-    const csv = ["time,temperature,humidity,light,motion,led,fan"]
+    const csv = ["time,temperature,humidity,darkDetection"]
       .concat(
         feed.map(
           (row) =>
-            `${row.timestamp},${row.temperature.toFixed(2)},${row.humidity.toFixed(2)},${row.light.toFixed(2)},${row.motion},${row.led},${row.fan}`,
+            `${row.timestamp},${row.temperature.toFixed(2)},${row.humidity.toFixed(2)},${row.darkDetection}`,
         ),
       )
       .join("\n")
@@ -231,8 +229,7 @@ const IotDashboard = () => {
                     <Legend />
                     <Line dataKey="temperature" name="Temperature" stroke="#1f8dff" strokeWidth={2.5} dot={false} />
                     <Line dataKey="humidity" name="Humidity" stroke="#11b8b1" strokeWidth={2} dot={false} />
-                    <Line dataKey="light" name="Light" stroke="#f59e0b" strokeWidth={2} dot={false} />
-                    <Line dataKey="motion" name="Motion" stroke="#e11d48" strokeWidth={2} dot={false} />
+                    <Line dataKey="darkDetection" name="Dark Detection" stroke="#f59e0b" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -286,9 +283,6 @@ const IotDashboard = () => {
               <div className="space-y-3 text-sm">
                 <label className="block">Temperature threshold
                   <input type="number" value={thresholds.temperature} onChange={(e) => setThresholds((p) => ({ ...p, temperature: Number(e.target.value) }))} className="mt-1 w-full rounded-md border border-sky-200/80 bg-white/75 px-2 py-1" />
-                </label>
-                <label className="block">Light threshold
-                  <input type="number" value={thresholds.light} onChange={(e) => setThresholds((p) => ({ ...p, light: Number(e.target.value) }))} className="mt-1 w-full rounded-md border border-sky-200/80 bg-white/75 px-2 py-1" />
                 </label>
                 <label className="block">Auto refresh rate (s)
                   <input type="number" min="2" max="30" value={refreshRate} onChange={(e) => setRefreshRate(Number(e.target.value))} className="mt-1 w-full rounded-md border border-sky-200/80 bg-white/75 px-2 py-1" />

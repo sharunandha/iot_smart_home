@@ -4,7 +4,6 @@ import { buildAutomation, buildInsights, formatTime, getSensorStatuses } from ".
 
 const DEFAULT_THRESHOLDS = {
   temperature: 30,
-  light: 220,
 }
 
 export const useIotDashboard = () => {
@@ -42,7 +41,7 @@ export const useIotDashboard = () => {
   }, [refreshEnabled, refreshRate])
 
   const latest = useMemo(
-    () => feed[feed.length - 1] ?? { temperature: 0, humidity: 0, light: 0, motion: 0, led: 0, fan: 0, timestamp: new Date().toISOString() },
+    () => feed[feed.length - 1] ?? { temperature: 0, humidity: 0, darkDetection: 0, timestamp: new Date().toISOString() },
     [feed],
   )
 
@@ -58,19 +57,17 @@ export const useIotDashboard = () => {
         .map((item) => ({
           id: item.id,
           time: formatTime(item.timestamp),
-          message: item.motion
-            ? "Motion detected, monitoring profile elevated."
-            : item.temperature > thresholds.temperature
+          message: item.temperature > thresholds.temperature
               ? "Temperature warning, smart fan activated."
-              : item.light < thresholds.light
-                ? "Darkness detected, smart light turned ON."
+              : item.darkDetection
+                ? "Darkness detected by LDR sensor."
                 : "Periodic sensor update received.",
         })),
     [feed, thresholds],
   )
 
   const notification = useMemo(() => {
-    if (latest.motion) return "Motion detected: security automation awakened."
+    if (latest.darkDetection) return "Dark environment detected from LDR sensor."
     if (latest.temperature >= thresholds.temperature) return "Temperature crossed threshold. Fan automation engaged."
     return ""
   }, [latest, thresholds.temperature])

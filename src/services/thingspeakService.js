@@ -5,7 +5,7 @@ const RESULT_LIMIT = 20
 const normalizeEntry = (entry) => {
   const temperature = Number(entry.field1 ?? 0)
   const humidity = Number(entry.field2 ?? 0)
-  const light = Number(entry.field3 ?? 0)
+  const darkDetection = Number(entry.field3 ?? 0)
   const motion = Number(entry.field4 ?? 0)
   const led = Number(entry.field5 ?? 0)
   const fan = Number(entry.field6 ?? 0)
@@ -15,7 +15,8 @@ const normalizeEntry = (entry) => {
     timestamp: entry.created_at,
     temperature,
     humidity,
-    light,
+    darkDetection: darkDetection > 0 ? 1 : 0,
+    light: darkDetection > 0 ? 1 : 0,
     motion: motion > 0 ? 1 : 0,
     led: led > 0 ? 1 : 0,
     fan: fan > 0 ? 1 : 0,
