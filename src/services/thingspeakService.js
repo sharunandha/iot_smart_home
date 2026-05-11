@@ -1,5 +1,5 @@
-const CHANNEL_ID = "3377365"
-const READ_API_KEY = "GES3BFQOYIFKHHDJ"
+const CHANNEL_ID = import.meta.env.VITE_THINGSPEAK_CHANNEL_ID
+const READ_API_KEY = import.meta.env.VITE_THINGSPEAK_READ_API_KEY
 const RESULT_LIMIT = 20
 
 const normalizeEntry = (entry) => {
