@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+  color: #1b2c42;
+  background-color: #edf6ff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff2fd, #edf7ff 40%, #effff6 80%);
+  color: #273a4f;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.glass-panel-light {
+  border: 1px solid rgba(200, 183, 255, 0.45);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(244, 248, 255, 0.86));
+  box-shadow:
+    0 22px 36px rgba(93, 129, 188, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(18px);
+}
+
+.glow-ring {
+  position: relative;
+}
+
+.glow-ring::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid rgba(144, 110, 255, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(120, 205, 255, 0.08),
+    0 0 30px rgba(255, 99, 222, 0.18) inset,
+    0 0 22px rgba(66, 172, 255, 0.12);
+}
+
+.status-dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 999px;
+  background: #8b5cf6;
+  box-shadow: 0 0 14px #a855f7;
+}
+
+.aurora-bg {
+  position: relative;
+  isolation: isolate;
+}
+
+.aurora-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 138, 225, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(115, 193, 255, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
+  z-index: -1;
+}
+
+.light-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(6px);
+  animation: floatOrb 12s ease-in-out infinite;
+}
+
+.orb-1 {
+  height: 26rem;
+  width: 26rem;
+  left: -8rem;
+  top: -7rem;
+  background: radial-gradient(circle, rgba(251, 146, 255, 0.45), rgba(251, 146, 255, 0));
+}
+
+.orb-2 {
+  height: 22rem;
+  width: 22rem;
+  right: -7rem;
+  top: 8rem;
+  animation-delay: 1.5s;
+  background: radial-gradient(circle, rgba(96, 205, 255, 0.4), rgba(96, 205, 255, 0));
+}
+
+.orb-3 {
+  height: 20rem;
+  width: 20rem;
+  left: 40%;
+  bottom: -8rem;
+  animation-delay: 3.2s;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.35), rgba(52, 211, 153, 0));
+}
+
+@keyframes floatOrb {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  50% {
+    transform: translateY(-18px) translateX(10px) scale(1.07);
+  }
+}
